@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Speed Test</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        ;
+        }
+
+        #sentence-container {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+
+        #input-box {
+            margin-top: 20px;
+            font-size: 1em;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        #submit-btn {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+    </style> -->
+</head>
+
+<body>
+    <h1>Typing Speed Test</h1>
+    <p>Type the sentence below:</p>
+    <div id="sentence-container"></div>
+    <input type="text" id="input-box"length='50px' oninput="checkTyping()">
+    <button id="submit-btn" onclick="submitResponse()">Submit</button>
+    <p id="result"></p>
+
+    <script>
+        const sentences = [
+            "The quick brown fox jumps over the lazy dog.",
+            "Coding is fun and rewarding.",
+            "Practice makes perfect.",
+            "Web development is an exciting field.",
+            "I love learning new things."
+        ];
+
+        let currentSentenceIndex = 0;
+        let startTime;
+        let correctWordCount = 0;
+        let incorrectWordCount = 0;
+
+        function generateRandomSentence() {
+            currentSentenceIndex = Math.floor(Math.random() * sentences.length);
+            return sentences[currentSentenceIndex];
+        }
+
+        function updateSentence() {
+            const sentenceContainer = document.getElementById('sentence-container');
+            sentenceContainer.textContent = generateRandomSentence();
+        }
+
+        function checkTyping() {
+            const inputBox = document.getElementById('input-box');
+
+            if (!startTime && inputBox.value.trim() !== '') {
+                startTime = new Date();
+            }
+        }
+
+        function submitResponse() {
+            const inputBox = document.getElementById('input-box');
+            const result = document.getElementById('result');
+
+            const typedSentence = inputBox.value.trim();
+            const currentSentence = sentences[currentSentenceIndex];
+
+            const typedWords = typedSentence.split(' ');
+            const currentWords = currentSentence.split(' ');
+
+            correctWordCount = 0;
+            incorrectWordCount = 0;
+
+            typedWords.forEach((word, index) => {
+                if (word === currentWords[index]) {
+                    correctWordCount++;
+                } else {
+                    incorrectWordCount++;
+                }
+            });
+
+            const totalWords = correctWordCount + incorrectWordCount;
+
+            if (typedSentence === currentSentence || totalWords === currentWords.length) {
+                const endTime = new Date();
+                const totalTime = (endTime - startTime) / 1000; // in seconds
+                const wordsPerMinute = Math.round((correctWordCount / totalTime) * 60);
+
+                result.textContent = `Typing speed: ${wordsPerMinute} words per minute | Correct words: ${correctWordCount} | Incorrect words: ${incorrectWordCount}`;
+                startTime = null; // Reset start time for the next sentence
+                updateSentence();
+                inputBox.value = '';
+            }
+        }
+
+        // Initialize the first sentence
+        updateSentence();
+    </script>
+</body>
+
+</html>
